@@ -1,0 +1,29 @@
+{
+  "monorepo": true,
+  "root": "apps/main",
+  "sourceRoot": "apps/main/src",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/main/tsconfig.app.json"
+  },
+  "projects": {
+    "main": {
+      "type": "application",
+      "root": "apps/main",
+      "entryFile": "main",
+      "sourceRoot": "apps/main/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/main/tsconfig.app.json"
+      }
+    },
+    "crawl-planner": {
+      "type": "application",
+      "root": "apps/crawl-planner",
+      "entryFile": "main",
+      "sourceRoot": "apps/crawl-planner/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/crawl-planner/tsconfig.app.json"
+      }
+    }
+  }
+}
