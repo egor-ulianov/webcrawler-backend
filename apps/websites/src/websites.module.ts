@@ -13,6 +13,12 @@ import { WebsiteCrawlExecutionPlanView } from '@app/common/entities/views/websit
 import { WebsiteCrawlExecutionPlanEntity } from '@app/common/entities/website-crawl-execution-plan-entity/website-crawl-execution-plan-entity';
 import { ExecutionsController } from './controllers/executions/executions.controller';
 import { ExecutionManagementService } from './business/execution-management/execution-management.service';
+import { WebsiteCrawlEntity } from '@app/common/entities/website-crawl-entity/website-crawl-entity';
+import { RecordsController } from './controllers/records/records.controller';
+import { RecordObserverService } from './business/record-observer/record-observer.service';
+import { RecordsResolverResolver } from './records-resolver/records-resolver.resolver';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -20,20 +26,50 @@ import { ExecutionManagementService } from './business/execution-management/exec
       isGlobal: true,
       envFilePath: '../.env',
     }),
-    TypeOrmModule.forRoot(
-      {
-        type: 'postgres',
-        host: 'database',
-        port: 5432,
-        username: 'webcrawler_user',
-        password: 'webcrawlerpasswd',
-        database: 'webcrawler_db',
-        synchronize: true,
-        entities: [TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity],
-      }),
-      TypeOrmModule.forFeature([TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity]),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: false,
+      autoSchemaFile: true,
+      path: 'api/graphql',
+    }),
+    TypeOrmModule.forRoot({
+      type: process.env.DATABASE_TYPE as any,
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT as any,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      synchronize: true,
+      entities: [
+        WebsiteCrawlEntity,
+        TagEntity,
+        WebsiteRecordEntity,
+        WebsiteCrawlExecutionPlanView,
+        WebsiteCrawlExecutionPlanEntity,
+      ],
+    }),
+    TypeOrmModule.forFeature([
+      WebsiteCrawlEntity,
+      TagEntity,
+      WebsiteRecordEntity,
+      WebsiteCrawlExecutionPlanView,
+      WebsiteCrawlExecutionPlanEntity,
+    ]),
   ],
-  controllers: [SitesController, TagsController, WebsitesController, ExecutionsController],
-  providers: [SiteManagementService, TagsManagementService, WebsitesService, ExecutionManagementService],
+  controllers: [
+    SitesController,
+    TagsController,
+    WebsitesController,
+    ExecutionsController,
+    RecordsController,
+  ],
+  providers: [
+    SiteManagementService,
+    TagsManagementService,
+    WebsitesService,
+    ExecutionManagementService,
+    RecordObserverService,
+    RecordsResolverResolver,
+  ],
 })
 export class WebsitesModule {}

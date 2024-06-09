@@ -1,30 +1,36 @@
-import { PagedRequestBase } from "../paged-request-base/paged-request-base";
+import { ApiProperty } from '@nestjs/swagger';
+import { PagedRequestBase } from '../paged-request-base/paged-request-base';
 
-export class WebSitesPagedRequest extends PagedRequestBase 
-{
-    public url: string;
+export class WebSitesPagedRequest extends PagedRequestBase {
+  @ApiProperty()
+  public url: string;
 
-    public label: string;
+  @ApiProperty()
+  public label: string;
 
-    public tags: Array<string>;
+  @ApiProperty()
+  public tags: Array<string>;
 
-    public orderColumn: string;
+  @ApiProperty()
+  public orderColumn: string;
 
-    public orderDirection: string;
+  @ApiProperty()
+  public orderDirection: string;
 
-    constructor(pageNumber: number, 
-        pageSize: number, 
-        url: string, 
-        label: string, 
-        tags: Array<string>,
-        orderColumn: string,
-        orderDirection: string)
-    {
-        super(pageNumber, pageSize);
-        this.url = url;
-        this.label = label;
-        this.tags = tags;
-        this.orderColumn = orderColumn;
-        this.orderDirection = orderDirection;
-    }
+  constructor(
+    pageNumber: number,
+    pageSize: number,
+    url: string,
+    label: string,
+    tags: Array<string>,
+    orderColumn: string,
+    orderDirection: string,
+  ) {
+    super(pageNumber, pageSize);
+    this.url = url;
+    this.label = label;
+    this.tags = tags;
+    this.orderColumn = orderColumn;
+    this.orderDirection = orderDirection;
+  }
 }

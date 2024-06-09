@@ -11,7 +11,9 @@ describe('CrawlPlannerController', () => {
       providers: [CrawlPlannerService],
     }).compile();
 
-    crawlPlannerController = app.get<CrawlPlannerController>(CrawlPlannerController);
+    crawlPlannerController = app.get<CrawlPlannerController>(
+      CrawlPlannerController,
+    );
   });
 
   describe('root', () => {

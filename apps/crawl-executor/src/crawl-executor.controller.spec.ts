@@ -11,7 +11,9 @@ describe('CrawlExecutorController', () => {
       providers: [CrawlExecutorService],
     }).compile();
 
-    crawlExecutorController = app.get<CrawlExecutorController>(CrawlExecutorController);
+    crawlExecutorController = app.get<CrawlExecutorController>(
+      CrawlExecutorController,
+    );
   });
 
   describe('root', () => {

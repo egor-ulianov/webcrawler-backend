@@ -9,7 +9,9 @@ describe('ExecutionManagementService', () => {
       providers: [ExecutionManagementService],
     }).compile();
 
-    service = module.get<ExecutionManagementService>(ExecutionManagementService);
+    service = module.get<ExecutionManagementService>(
+      ExecutionManagementService,
+    );
   });
 
   it('should be defined', () => {

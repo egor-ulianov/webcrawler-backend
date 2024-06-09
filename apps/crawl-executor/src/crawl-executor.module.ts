@@ -14,23 +14,34 @@ import { WebsiteRecordEntity } from '@app/common/entities/website-record-entity/
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
     RmqModule,
     HttpModule,
-    TypeOrmModule.forRoot(
-      {
-        type: 'postgres',
-        host: 'database',
-        port: 5432,
-        username: 'webcrawler_user',
-        password: 'webcrawlerpasswd',
-        database: 'webcrawler_db',
-        synchronize: true,
-        entities: [TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity, WebsiteCrawlEntity],
-      }),
-      TypeOrmModule.forFeature([TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity, WebsiteCrawlEntity])
-    ],
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'database',
+      port: 5432,
+      username: 'webcrawler_user',
+      password: 'webcrawlerpasswd',
+      database: 'webcrawler_db',
+      synchronize: true,
+      entities: [
+        TagEntity,
+        WebsiteRecordEntity,
+        WebsiteCrawlExecutionPlanView,
+        WebsiteCrawlExecutionPlanEntity,
+        WebsiteCrawlEntity,
+      ],
+    }),
+    TypeOrmModule.forFeature([
+      TagEntity,
+      WebsiteRecordEntity,
+      WebsiteCrawlExecutionPlanView,
+      WebsiteCrawlExecutionPlanEntity,
+      WebsiteCrawlEntity,
+    ]),
+  ],
   controllers: [CrawlExecutorController],
   providers: [CrawlExecutorService],
 })

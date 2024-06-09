@@ -8,45 +8,57 @@ import { WebsiteCrawlExecutionPlanEntity } from '@app/common/entities/website-cr
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class ExecutionManagementService implements IExecutionManagementService 
-{
-    constructor(@InjectRepository(WebsiteCrawlExecutionPlanEntity)
-                private readonly _websiteCrawlExecutionPlanRepository: Repository<WebsiteCrawlExecutionPlanEntity>) {}
+export class ExecutionManagementService implements IExecutionManagementService {
+  constructor(
+    @InjectRepository(WebsiteCrawlExecutionPlanEntity)
+    private readonly _websiteCrawlExecutionPlanRepository: Repository<WebsiteCrawlExecutionPlanEntity>,
+  ) {}
 
-    public createExecution(execution: WebsiteCrawlExecutionPlan): Promise<WebsiteCrawlExecutionPlan> {
-        return this._websiteCrawlExecutionPlanRepository.save(WebsiteCrawlExecutionPlanEntity.fromModel(execution));
-    }
+  public createExecution(
+    execution: WebsiteCrawlExecutionPlan,
+  ): Promise<WebsiteCrawlExecutionPlan> {
+    return this._websiteCrawlExecutionPlanRepository.save(
+      WebsiteCrawlExecutionPlanEntity.fromModel(execution),
+    );
+  }
 
-    public getExecution(id: number): Promise<WebsiteCrawlExecutionPlan> {
-        return this._websiteCrawlExecutionPlanRepository.findOne({ where: { id: id } })
-            .then((execution: WebsiteCrawlExecutionPlanEntity) => WebsiteCrawlExecutionPlan.fromEntity(execution));
-    }
+  public getExecution(id: number): Promise<WebsiteCrawlExecutionPlan> {
+    return this._websiteCrawlExecutionPlanRepository
+      .findOne({ where: { id: id } })
+      .then((execution: WebsiteCrawlExecutionPlanEntity) =>
+        WebsiteCrawlExecutionPlan.fromEntity(execution),
+      );
+  }
 
-    public getPagedExecutions(request: WebSitesExecutionsPagedRequest): Promise<PagedResponse<WebsiteCrawlExecutionPlan>> {
-        let whereClause = [];
-        if (request.siteId) whereClause.push({ websiteRecordId: request.siteId });
+  public getPagedExecutions(
+    request: WebSitesExecutionsPagedRequest,
+  ): Promise<PagedResponse<WebsiteCrawlExecutionPlan>> {
+    const whereClause = [];
+    if (request.siteId) whereClause.push({ websiteRecordId: request.siteId });
 
-        let orderColumn = 'id';
-        let orderDirection = 'ASC';
+    const orderColumn = 'id';
+    const orderDirection = 'ASC';
 
-        return this._websiteCrawlExecutionPlanRepository.findAndCount({
-            skip: (request.pageNumber - 1) * request.pageSize,
-            take: request.pageSize,
-            relations: ['websiteRecord'],
-            order: {
-                [orderColumn]: orderDirection,
-            },
-            where: whereClause
-        }).then(([executions, total]) => {
-            return new PagedResponse<WebsiteCrawlExecutionPlan>(
-                request.pageNumber,
-                request.pageSize,
-                total,
-                Math.ceil(total / request.pageSize),
-                executions.map((execution: WebsiteCrawlExecutionPlanEntity) => WebsiteCrawlExecutionPlan.fromEntity(execution))
-            );
-        });
-    }
-
-    
+    return this._websiteCrawlExecutionPlanRepository
+      .findAndCount({
+        skip: (request.pageNumber - 1) * request.pageSize,
+        take: request.pageSize,
+        relations: ['websiteRecord'],
+        order: {
+          [orderColumn]: orderDirection,
+        },
+        where: whereClause,
+      })
+      .then(([executions, total]) => {
+        return new PagedResponse<WebsiteCrawlExecutionPlan>(
+          request.pageNumber,
+          request.pageSize,
+          total,
+          Math.ceil(total / request.pageSize),
+          executions.map((execution: WebsiteCrawlExecutionPlanEntity) =>
+            WebsiteCrawlExecutionPlan.fromEntity(execution),
+          ),
+        );
+      });
+  }
 }

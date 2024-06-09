@@ -6,29 +6,37 @@ import { TagEntity } from '@app/common/entities/tag-entity/tag-entity';
 import { Tag } from '@app/common/models/tag/tag';
 
 @Injectable()
-export class TagsManagementService implements ITagsManagementService 
-{
-    constructor(@InjectRepository(TagEntity) private _tagRepository: Repository<TagEntity>)
-    {   }
+export class TagsManagementService implements ITagsManagementService {
+  constructor(
+    @InjectRepository(TagEntity) private _tagRepository: Repository<TagEntity>,
+  ) {}
 
-    public async createTag(tag: Tag): Promise<Tag> {
-        return await this._tagRepository.save(TagEntity.fromModel(tag));
-    }
+  public async createTag(tag: Tag): Promise<Tag> {
+    const existingTag = await this._tagRepository.findOne({
+      where: { name: tag.name },
+    });
+    console.log(tag.name, existingTag);
 
-    public async updateTag(tag: Tag): Promise<Tag> {
-        return await this._tagRepository.save(TagEntity.fromModel(tag));
-    }
+    if (existingTag) return existingTag;
 
-    public async deleteTag(tagId: number): Promise<void> {
-        await this._tagRepository.delete(tagId);
-    }
+    return await this._tagRepository.save(TagEntity.fromModel(tag));
+  }
 
-    public async getTag(tagId: number): Promise<Tag> {
-        return Tag.fromEntity(await this._tagRepository.findOne({ where: { id: tagId } }));
-    }
+  public async updateTag(tag: Tag): Promise<Tag> {
+    return await this._tagRepository.save(TagEntity.fromModel(tag));
+  }
 
-    public async getTags(): Promise<Tag[]> {
-        return (await this._tagRepository.find()).map(tag => Tag.fromEntity(tag));
-    }
-    
+  public async deleteTag(tagId: number): Promise<void> {
+    await this._tagRepository.delete(tagId);
+  }
+
+  public async getTag(tagId: number): Promise<Tag> {
+    return Tag.fromEntity(
+      await this._tagRepository.findOne({ where: { id: tagId } }),
+    );
+  }
+
+  public async getTags(): Promise<Tag[]> {
+    return (await this._tagRepository.find()).map((tag) => Tag.fromEntity(tag));
+  }
 }

@@ -16,13 +16,14 @@ async function run() {
 
   const alreadyVisitedNodes: CrawlData[] = [];
 
-  crawlData.urls.forEach(async url => {
-    await crawlerService.crawlInnerNode(url, alreadyVisitedNodes, crawlData.initialNode)
-    .then(result => {
-      console.log(result.length);
-      parentPort.postMessage(result.length);
-      process.exit(0);
-    });
+  crawlData.urls.forEach(async (url) => {
+    await crawlerService
+      .crawlInnerNode(url, alreadyVisitedNodes, crawlData.initialNode)
+      .then((result) => {
+        console.log(result.length);
+        parentPort.postMessage(result.length);
+        process.exit(0);
+      });
   });
 }
 

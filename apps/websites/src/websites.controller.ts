@@ -5,7 +5,8 @@ import { WebsitesService } from './websites.service';
 export class WebsitesController {
   constructor(
     @Inject(WebsitesService)
-    private readonly websitesService: WebsitesService) {}
+    private readonly websitesService: WebsitesService,
+  ) {}
 
   @Get()
   getHello(): string {

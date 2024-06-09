@@ -11,26 +11,39 @@ import { ConfigModule } from '@nestjs/config';
 import { RmqModule } from '@app/common';
 
 @Module({
-  imports: [HttpModule,
+  imports: [
+    HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '../.env',
     }),
-    RmqModule.register({ 
-      name: 'CRAWLEXECUTOR' 
+    RmqModule.register({
+      name: 'CRAWLEXECUTOR',
     }),
-    TypeOrmModule.forRoot(
-      {
-        type: 'postgres',
-        host: 'database',
-        port: 5432,
-        username: 'webcrawler_user',
-        password: 'webcrawlerpasswd',
-        database: 'webcrawler_db',
-        synchronize: true,
-        entities: [TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity, WebsiteCrawlEntity],
-      }),
-      TypeOrmModule.forFeature([TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity, WebsiteCrawlEntity])],
+    TypeOrmModule.forRoot({
+      type: process.env.DATABASE_TYPE as any,
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT as any,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      synchronize: true,
+      entities: [
+        TagEntity,
+        WebsiteRecordEntity,
+        WebsiteCrawlExecutionPlanView,
+        WebsiteCrawlExecutionPlanEntity,
+        WebsiteCrawlEntity,
+      ],
+    }),
+    TypeOrmModule.forFeature([
+      TagEntity,
+      WebsiteRecordEntity,
+      WebsiteCrawlExecutionPlanView,
+      WebsiteCrawlExecutionPlanEntity,
+      WebsiteCrawlEntity,
+    ]),
+  ],
   providers: [CrawlWorkerService],
 })
 export class CrawlWorkerModule {}

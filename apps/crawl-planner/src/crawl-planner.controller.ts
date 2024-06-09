@@ -5,10 +5,11 @@ import { CrawlPlannerService } from './crawl-planner.service';
 export class CrawlPlannerController {
   constructor(
     @Inject(CrawlPlannerService)
-    private readonly websitesService: CrawlPlannerService) {}
+    private readonly websitesService: CrawlPlannerService,
+  ) {}
 
-    @Get()
-    getHello(): string {
-      return this.websitesService.getHello();
-    }
+  @Get()
+  getHello(): string {
+    return this.websitesService.getHello();
+  }
 }

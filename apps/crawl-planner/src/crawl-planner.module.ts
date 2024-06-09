@@ -16,12 +16,11 @@ import { CrawlPlannerController } from './crawl-planner.controller';
       isGlobal: true,
       envFilePath: '../.env',
     }),
-    RmqModule.register({ 
-    name: 'CRAWLEXECUTOR' 
-  }),
-  ScheduleModule.forRoot(),
-  TypeOrmModule.forRoot(
-    {
+    RmqModule.register({
+      name: 'CRAWLEXECUTOR',
+    }),
+    ScheduleModule.forRoot(),
+    TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'database',
       port: 5432,
@@ -29,9 +28,20 @@ import { CrawlPlannerController } from './crawl-planner.controller';
       password: 'webcrawlerpasswd',
       database: 'webcrawler_db',
       synchronize: true,
-      entities: [TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity],
+      entities: [
+        TagEntity,
+        WebsiteRecordEntity,
+        WebsiteCrawlExecutionPlanView,
+        WebsiteCrawlExecutionPlanEntity,
+      ],
     }),
-    TypeOrmModule.forFeature([TagEntity, WebsiteRecordEntity, WebsiteCrawlExecutionPlanView, WebsiteCrawlExecutionPlanEntity]),],
+    TypeOrmModule.forFeature([
+      TagEntity,
+      WebsiteRecordEntity,
+      WebsiteCrawlExecutionPlanView,
+      WebsiteCrawlExecutionPlanEntity,
+    ]),
+  ],
   providers: [CrawlPlannerService],
   controllers: [CrawlPlannerController],
 })
